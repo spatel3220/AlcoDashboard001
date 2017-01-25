@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico"/>
+<link rel="stylesheet" media="all" href="/assets/css/layout.css" type="text/css">
+<link rel="stylesheet" media="all" href="/assets/css/style.css" type="text/css">
+    <link href='http://fonts.googleapis.com/css?family=Passion+One|PT+Sans:400,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'/>
+<script type="text/javascript" src="/assets/js/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="/assets/js/shell.js"></script>
+</head>
+<body>
+<!--Start: Comment Header (Please put it in a common template)-->
+<div class="header d-table-s outer">
+    <div class="d-tcl-s vam">
+        <img class="pl30"  src="/assets/images/logo.png"/>
+    </div>
+    <div class="d-tcr-s vam nav">
+        <a href="">Documentation<span></span></a>
+        <a href="">Help<span></span></a>
+    </div>
+</div>
+<!--End: Comment Header -->
+
+<div class="outer sign-in">
+    <div class="d-ib-s d-opt vam">
+        <img src="/assets/images/device.png"/>
+    </div>
+    <div class="d-ib d-opt pl30"></div>
+    <form method="post" class="d-ib-s vam tal">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+        <div class="h tac">
+            Sign in
+        </div>
+        <div class="pt30">
+            <label>Username</label>
+            <input type="text" name="email" required="true" class="mt10" placeholder="Email address"/>
+        </div>
+        <div class="pt30">
+            <label>Password <a class="float-r">Forgot Password ?</a></label>
+            <input type="password" name="password" required="true" class="mt10" placeholder="Enter password"/>
+        </div>
+        <div class="pt30">
+            <input type="submit" value="Sign in" style="width: 100%;"/>
+        </div>
+    </form>
+
+</div>
+
+<div class="footer d-table-s outer pt30 pb30 ">
+    <div class="d-tcl-s vam ">
+        <span> &copy; 2016-2017 Airosense. All Rights Reserved.</span>
+    </div>
+</div>
+</body>
+</html>
+                                                                                                                              

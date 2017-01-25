@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<!--[if lt IE 7]>      <html lang="en" ng-app="airoSenseApp" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html lang="en" ng-app="airoSenseApp" class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html lang="en" ng-app="airoSenseApp" class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html lang="en" ng-app="airoSenseApp" class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Airosense</title>
+  <link rel="shortcut icon" type="image/x-icon" href="/assets/images/favicon.ico"/>
+  <meta name="description" content="">
+  <link rel="stylesheet" href="/assets/css/layout.css">
+  <link rel="stylesheet" href="/assets/css/billboard.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.css" type="text/css"/>
+  <link rel="stylesheet" href="/assets/css/bootstrap-theme.css" type="text/css"/>
+  <link rel="stylesheet" media="all" href="/assets/js/jquery-ui/jquery-ui.min.css" type="text/css"/>
+  <link rel="stylesheet" media="all" href="/bower_components/angular-chart.js/dist/angular-chart.min.css" type="text/css"/>
+  <link href='http://fonts.googleapis.com/css?family=Passion+One|PT+Sans:400,400italic&subset=latin,latin-ext' rel='stylesheet' type='text/css'/>
+</head>
+<body ng-controller="MainCtrl">
+<input type="hidden" id="userObj" value=<%- JSON.stringify(user) %> >
+
+<header ng-show="toggleHF()"></header>
+<div ng-view></div>
+<footer ng-show="toggleHF()"></footer>
+<script src="/assets/js/jquery-2.1.1.min.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+<script src="/assets/js/shell.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
+<script src="/bower_components/angular/angular.min.js"></script>
+<script src="/bower_components/angular-route/angular-route.min.js"></script>
+<script src="/bower_components/Chart.js/Chart.min.js"></script>
+<script src="/bower_components/angular-chart.js/dist/angular-chart.min.js"></script>
+<script src="/app.js"></script>
+<script src="/services/airosense-service.js"></script>
+<script src="/includes/header/header.js"></script>
+<script src="/includes/footer/footer.js"></script>
+<script src="/dashboard/dashboard.js"></script>
+<script src="/devicehealth/device-health.js"></script>
+<script src="/datausage/data-usage.js"></script>
+<script src="/billboard/billboard.js"></script>
+<script type="text/javascript" src="/assets/js/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/assets/js/i-html.js"></script>
+</body>
+</html>

@@ -1,0 +1,234 @@
+<div class="outer bg dashboard ">
+    <div class="pt10 pb20 tac">
+        <h2 class="h" style="font-size: 200%">Device Trends</h2>
+
+        <p>Total devices : {{numOfDevices}}</p>
+    </div>
+    <div class="d-table">
+        <div class="d-tc vat " style="background: #ECECEC;">
+            <div class="device-details" id="device-details">
+                <div class="d-table pb10" style="border-bottom: 1px solid black;">
+                    <div class="d-tc vam">
+                        <div class="h d-ib vam">
+                            {{heading}}
+                        </div>
+                    </div>
+                    <div class="d-tcr vam">
+                        <div style="padding-right:50px; display: inline-block">
+                        <input type="radio" name="report-type" ng-model="reportType.report" id="report-type-live"
+                               value="live"/>
+                        <label for="report-type-live"><span><span></span></span> &nbsp;
+                            <div class="d-ib vam">AQI</div>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="report-type" ng-model="reportType.report" id="report-type-historic"
+                               value='historic'/>
+                        <label for="report-type-historic"><span><span></span></span> &nbsp;
+                            <div class="d-ib vam">Historic Data</div>
+                        </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="report-type" ng-model="reportType.report" id="report-type-table"
+                               value='table'/>
+                        <label for="report-type-table"><span><span></span></span> &nbsp;
+                            <div class="d-ib vam">Live Data</div>
+                        </label>
+                        </div>
+                        Devices: &nbsp;&nbsp;&nbsp;
+                        <select ng-options="data.deviceid as data.deviceid for data in deviceDropDownData"
+                                ng-selected="0" ng-model="item.deviceid"
+                                ng-change="getSensorData(); updateHistory()"></select>
+                        <button ng-click="toggleModal()" class="btn btn-primary">Notification</button>
+                        <modal id="modalnotify" title="Cisco Emergency Response System" visible="showModal">
+                            <form role="form">
+                                <label for="phone" class="col-sm-3 control-label">Phone Number</label>
+                                <input type="tel" pattern= "^\d{10}$" class="form-control" id="phone" placeholder="ex. 408XXXXXXX" ng-model="phonenumber"/>
+                                <br>
+                                <button ng-click="sendSMS(phonenumber)" class="btn btn-primary">SMS</button>
+                                <button ng-click="callUser(phonenumber)" class="btn btn-primary">CALL</button>
+                                <button ng-click="" class="btn btn-primary">CONFERENCE</button>
+                                <button ng-click="showhide()" class="btn btn-primary">MEETING ROOM</button>
+                                <br>
+                                <br>
+                                <div id="meeting_div" hidden>
+                                    <label for="email" class="col-sm-3 control-label">Email</label>
+                                    <input type="email" class="form-control" id="email" placeholder="ex. abc@xyz.com" ng-model="emailid"/>
+                                    <br>
+                                    <button ng-click="meeting(emailid)" class="btn btn-primary">Create</button>
+                                </div>
+                            </form> 
+                        </modal>
+                    </div>
+                </div>
+                <div id="historic-report" style="display: none;">
+                    <div class="d-tc tac vam pb10">
+                        <h4 class="d-ib vam">Duration :</h4> &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="duration" ng-model="duration.type" id="report-type-day"
+                               value="day"/><label for="report-type-day"><span><span></span></span> &nbsp;
+                        <div class="d-ib vam">Day</div>
+                    </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="duration" ng-model="duration.type" id="report-type-week"
+                               value='week'/><label for="report-type-week"><span><span></span></span> &nbsp;
+                        <div class="d-ib vam">Week</div>
+                    </label>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <input type="radio" name="duration" ng-model="duration.type" id="report-type-month"
+                               value='month'/><label for="report-type-month"><span><span></span></span> &nbsp;
+                        <div class="d-ib vam">Month</div>
+                    </label>
+                    </div>
+                    <div id="line-chart" class="pb10 tac">
+                        <img id="loader" class="pl30" src="/assets/images/loader.gif"/>
+                        <canvas id="line" class="chart chart-line" chart-data="chartData"
+                                chart-labels="labels" chart-legend="true" chart-series="series"
+                                chart-click="onClick" chart-colours="chartColors" chart-options="chartOptions">
+                        </canvas>
+                    </div>
+                    <div class="tac">
+                        <label ng-repeat="sensor in sensors">
+                            <input name="sensorRadio" ng-model="$parent.selection" type="radio" value="{{sensor.name}}"/> <label for="{{sensor.name}}"><span
+                                class="mr10"><span></span></span> {{sensor.name}}</label>
+                            &nbsp; &nbsp; &nbsp;
+                        </label>
+                    </div>
+                </div>
+                <ul class="sensors" id="live-sensors">
+                    <li>
+                        <div class="select">PM2p5</br>(AQI : {{trendsstatsObj.PM2p5.value}})</div>
+                        <div class="value ng-class: [trendsstatsObj.PM2p5.level, trendsstatsObj.PM2p5.on]">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="select">PM10 </br>(AQI : {{trendsstatsObj.PM10.value}})</div>
+                        <div class="value ng-class: [trendsstatsObj.PM10.level, trendsstatsObj.PM10.on]">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="select">CO</br>(AQI : {{trendsstatsObj.CO.value}})</div>
+                        <div class="value ng-class: [trendsstatsObj.CO.level, trendsstatsObj.CO.on]">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="select">SO2</br>(AQI : {{trendsstatsObj.SO2.value}})</div>
+                        <div class="value ng-class: [trendsstatsObj.SO2.level, trendsstatsObj.SO2.on]">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="select">O3</br>(AQI : {{trendsstatsObj.O3.value}})</div>
+                        <div class="value ng-class: [trendsstatsObj.O3.level, trendsstatsObj.O3.on]">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="select">NO2</br>(AQI : {{trendsstatsObj.NO2.value}})</div>
+                        <div class="value ng-class: [trendsstatsObj.NO2.level, trendsstatsObj.NO2.on]">
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>
+                        </div>
+                    </li>
+                </ul>
+                <div id="live-table" class="pt20" style="display: none;">
+                    <h5>Data Captured at: {{formatDate(liveData.timestamp)}}</h5>
+                    <h5>Device Located at: {{deviceLocation}}</h5>
+                     <table class="table table-striped table-responsive table-bordered header-fixed">
+                         <thead>
+                         <tr>
+                             <th width="10%">#</th>
+                             <th width="20%">Sensor Name</th>
+                             <th width="69%">Sensor Value</th>
+                         </tr>
+                         </thead>
+                         <tbody>
+                         <tr ng-repeat="(key, value) in liveData">
+                             <td width="10%">{{$index+1}}</td>
+                             <td width="21%">{{key}}</td>
+                             <td width="68%">{{value}}</td>
+                         </tr>
+                         </tbody>
+                     </table>
+                 </div>
+             </div>
+         </div>
+         <div class="d-tc vat tac" id="devices-indicator">
+
+             <div ng-click="showData(3)" class="alert">
+                 <div class="alert-high">
+                     <span>{{count.high}}</span>
+                     High
+                 </div>
+             </div>
+
+             <div ng-click="showData(2)" class="alert">
+                 <div class="alert-medium">
+                     <span>{{count.medium}}</span>
+                     Medium
+                 </div>
+             </div>
+
+             <div ng-click="showData(1)" class="alert">
+                 <div class="alert-low">
+                     <span>{{count.low}}</span>
+                     Low
+                 </div>
+             </div>
+
+         </div>
+     </div>
+ </div>

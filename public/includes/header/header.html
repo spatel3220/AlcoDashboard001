@@ -1,0 +1,19 @@
+<div class="header d-table-s outer">
+    <div ng-click="showHomePage()" style="cursor:pointer " class="d-tcl-s vam airo-logo">
+        <img class="pl30" src="/assets/images/logo.png"/>
+    </div>
+    <div class="d-tcl-s vam nav">
+        <a href="#dashboard" class="selected">Dashboard<span></span></a>
+        <a href="#device-health">Device Health<span></span></a>
+        <a href="#data-usage">Data Usage<span></span></a>
+        <a href="#billboard">Billboard<span></span></a>
+    </div>
+    <div class="d-tcr-s vam control">
+        <span class="ico"></span>
+        <div class="links">
+            <a class="ico-user">{{userData.firstName}} {{userData.lastName}}</a>
+            <a class="ico-setting">Settings</a>
+            <a href="/logout" class="ico-logout">Logout</a>
+        </div>
+    </div>
+</div>

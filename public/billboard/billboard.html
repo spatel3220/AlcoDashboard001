@@ -1,0 +1,136 @@
+<div>
+    <div class="grey_rectangle" ng-style="container"  ng-show="currentScreenId==='screen1'">
+        <div class="heading_airosense_black" ng-style="airosenseText">AIROSENSE</div>
+        <!-- <div class="device">Device:{{testDevice}}</div>-->
+        <img class="icon_high_billboard" ng-src="{{topImage}}">
+        <p class="red_rectangle" ng-style="innerRectangle">
+        <p class="value_billboard">{{testObj.PM2p5.value}}</p>
+        <p class="aqi_billboard">AQI</p>
+        </p>
+        <div class="high_billboard" ng-style="textStyle">{{testalert}}</div>
+        <img class="arrow_billboard" ng-style="myArrow" ng-src="{{whiteArrow}}">
+        <div class="pollution_billboard" ng-style="pollutionText">Pollution</div>
+        <div ng-show="footerScreenId==='newDashboard'" class="footer_billboard" ng-style="myFooter">
+            <img class="icon_temperature_billboard" src="/assets/images/temp.png">
+            <div class="display_temp_billboard">{{liveTestData.temperature | number:0}}</div>
+            <div class="celsius_billboard"><sup>o</sup>C</div>
+            <div class="date_billboard">{{testDay +' ' + testMonth+' ' +testDate}}</div>
+            <!--<div class="time_billboard">{{hours + ":" + minutes}}</div>-->
+        </div>
+        <div ng-show="footerScreenId==='noisy'" class="footer_billboard" ng-style="myFooter">
+            <img class="icon_temperature_billboard" src="/assets/images/noise.png">
+            <div class="noisy">Noisy</div>
+            <img class="icon_pollution" src="/assets/images/icon-pollution.png">
+            <div class="pollution_level">{{radiationValue}}</div>
+            <div class="pollution_text">Radiation</div>
+        </div>
+        <div ng-show="footerScreenId==='sensor1'" class="footer_billboard" ng-style="myFooter">
+            <img class="icon_PM25" src="/assets/images/pm2p5.png">
+            <div class="Rectangle-54"></div>
+            <div class="pm2p5value">{{testObj.PM2p5.value}}</div>
+            <div class="pm2p5alert">{{testalert}}</div>
+            <div class="O3">O3</div>
+            <div class="O3alert" ng-style="O3alert">{{O3Value}}</div>
+            <div class="CO">CO</div>
+            <div class="COalert" ng-style="COalert">{{COValue}}</div>
+        </div>
+        <div ng-show="footerScreenId==='sensor2'" class="footer_billboard" ng-style="myFooter">
+            <img class="icon_PM25" src="/assets/images/pm2p5.png">
+            <div class="Rectangle-54"></div>
+            <div class="pm2p5value">{{testObj.PM2p5.value}}</div>
+            <div class="pm2p5alert">{{testalert}}</div>
+            <div class="O3">SO2</div>
+            <div class="O3alert" ng-style="SO2alert">{{SO2Value}}</div>
+            <div class="CO">NO2</div>
+            <div class="COalert" ng-style="NO2alert">{{NO2Value}}</div>
+        </div>
+        <div ng-show="footerScreenId==='sensor3'" class="footer_billboard" ng-style="myFooter">
+            <img class="icon_PM25" src="/assets/images/pm2p5.png">
+            <div class="Rectangle-54"></div>
+            <div class="pm2p5value">{{testObj.PM2p5.value}}</div>
+            <div class="pm2p5alert">{{testalert}}</div>
+            <div class="O3">CO2</div>
+            <div class="O3alert" ng-style="CO2alert">{{CO2Value}}</div>
+        </div>
+    </div>
+    <div ng-show="currentScreenId==='screen2'">
+        <div class="grey_rectangle" style="margin-top:4px;">
+            <div class="left_rectangle1">
+                <div class="date">{{testDay +' ' + testMonth+' ' +testDate}}</div>
+
+            </div>
+            <div class="left_rectangle2">
+                <img class="icon_temperature" src="/assets/images/temp-black.png">
+                <div class="left-tempValue">{{liveTestData.temperature | number:0}}</div>
+                <div class="left-celsius"><sup>o</sup>C</div>
+
+
+            </div>
+            <div class="left_rectangle3" ng-style="noisyBackground">
+                <img class="left-noisyimg" src="/assets/images/noisy-black.png">
+                <div class="left-noisy">Noisy</div>
+                <div class="left-noisyValue">60 dB</div>
+
+            </div>
+            <div class="left_rectangle4" ng-style="radiationBackground">
+                <img class="left-pollution" src="/assets/images/pollution-black.png">
+                <div class="left-radiationVal" ng-style="radiationColor">{{radiationValue}}</div>
+                <div class="left-radiation">Radiation <br> {{liveTestData.radiation}} ur/Hr</div>
+            </div>
+        </div>
+    </div>
+    <div ng-show="currentScreenId==='screen3'">
+        <div class="grey_rectangle" style="margin-top:4px;">
+            <div class="left_rectangle1">
+                <div class="date">{{testDay +' ' + testMonth+' ' +testDate}}</div>
+
+            </div>
+            <div class="left_rectangle2">
+                <img class="icon_temperature" src="/assets/images/humidity-black.png">
+                <div class="left-tempValue">{{liveTestData.humidity | number:0}}</div>
+                <div class="left-celsius">%</div>
+
+
+            </div>
+            <div class="left_rectangle3" ng-style="innerRectangle">
+                <div class="left-PM">PM2.5</div>
+                <div class="left-PMvalue">{{testObj.PM2p5.value}}</div>
+                <div class="left-PMalert">{{testalert}}</div>
+
+
+            </div>
+            <div class="left_rectangle4" ng-style="CO2Background">
+                <div class="left-CO2">CO2</div>
+                <div class="left-CO2Val">{{liveTestData.CO2}}</div>
+                <div class="left-CO2alert">{{CO2Value}}</div>
+            </div>
+        </div>
+    </div>
+    <div ng-show="currentScreenId==='screen4'">
+        <div class="grey_rectangle" style="margin-top:4px;">
+            <div class="left_rectangle1">
+                <div class="date">{{testDay +' ' + testMonth+' ' +testDate}}</div>
+
+            </div>
+            <div class="left_rectangle2" ng-style="O3Background">
+                <div class="left-O3">O3</div>
+                <div class="left-O3Val">{{liveTestData.O3}}</div>
+                <div class="left-O3alert">{{O3Value}}</div>
+
+
+            </div>
+            <div class="left_rectangle3" ng-style="SO2Background">
+                <div class="left-PM">SO2</div>
+                <div class="left-PMvalue">{{liveTestData.SO2}}</div>
+                <div class="left-PMalert">{{SO2Value}}</div>
+
+
+            </div>
+            <div class="left_rectangle4" ng-style="NO2Background">
+                <div class="left-CO2">NO2</div>
+                <div class="left-CO2Val">{{liveTestData.NO2}}</div>
+                <div class="left-CO2alert">{{NO2Value}}</div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html>
+    <head><title>Meeting room</title>
+	<link href="/assets/css/bootstrap.min.css" rel="stylesheet">
+        <style type="text/css">
+	.container{
+	    margin-top: 20px;
+	}
+	.chat
+	{
+	    list-style: none;
+	    margin: 0;
+	    padding: 0;
+	}
+
+	.chat li
+	{
+	    margin-bottom: 10px;
+	    padding-bottom: 5px;
+	    border-bottom: 1px dotted #B3A9A9;
+	}
+
+	.chat li.left .chat-body
+	{
+	    margin-left: 60px;
+	}
+
+	.chat li.right .chat-body
+	{
+	    margin-right: 60px;
+	}
+
+
+	.chat li .chat-body p
+	{
+	    margin: 0;
+	    color: #777777;
+	}
+
+	.panel .slidedown .glyphicon, .chat .glyphicon
+	{
+	    margin-right: 5px;
+	}
+
+	.panel-body
+	{
+	    overflow-y: scroll;
+	    height: 450px;
+	}
+
+	::-webkit-scrollbar-track
+	{
+	    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	    background-color: #F5F5F5;
+	}
+
+	::-webkit-scrollbar
+	{
+	    width: 12px;
+	    background-color: #F5F5F5;
+	}
+
+	::-webkit-scrollbar-thumb
+	{
+	    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+	    background-color: #555;
+	}
+	
+	.float-my-children > * {
+		float:left;
+		margin-right:5px;
+	}
+	.clearfix {
+		*zoom:1 /* for IE */
+	}
+
+	.clearfix:before,
+	.clearfix:after {
+		content: " ";
+		display: table;
+	}
+
+	.clearfix:after {
+		clear: both;
+	}
+</style>
+<script type="text/javascript" src="/assets/js/jquery-2.1.1.min.js"></script>
+
+<script type="text/javascript">
+	var token;
+	var room;
+	var msglen = 0;
+	var useremail;
+	function getParameterByName(name, url) {
+	    if (!url) url = window.location.href;
+	    name = name.replace(/[\[\]]/g, "\\$&");
+	    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)", "i"),
+		results = regex.exec(url);
+	    if (!results) return null;
+	    if (!results[2]) return '';
+	    return decodeURIComponent(results[2].replace(/\+/g, " "));
+	}
+	
+	function sendRequest(url, action, data, headers, next){
+	  $.ajax({
+	    url: url,
+	    headers: headers,
+	    method: action,
+	    dataType: 'json',
+	    data: data,
+	    success: function(resdata){
+	      //console.log(resdata);
+	      
+	    if(next == "member"){
+	        room = resdata.id;
+			var memberdata = {
+			  "roomId": resdata.id,
+			  "personEmail": useremail
+			};
+			var memberheaders = {
+			  "Content-type":"application/json; charset=utf-8",
+			  "Authorization":"Bearer "+token
+			};
+			var tid = setInterval(pollMsg, 4000);
+			sendRequest("https://api.ciscospark.com/v1/memberships","POST",JSON.stringify(memberdata),memberheaders,"");
+	    }else if(next == "message"){
+			$("#btn-input").val("");
+		}else if(next == 'poll'){
+			if(typeof resdata.items != "undefined"){
+				var ival = 0;
+				if(resdata.items.length - msglen > 0){
+					ival = resdata.items.length - msglen;
+					msglen = resdata.items.length;
+				}
+				for(var i=ival-1;i>=0;i--){
+					appendMsg(resdata.items[i]);
+				}
+				$(".panel-body").scrollTop($(".panel-body")[0].scrollHeight);
+			}
+		}
+	    },
+	    error: function(error){
+              console.log('error: ');
+	      console.log(error);
+	    }
+	  });
+	}
+	var last = new Date();
+	var today = new Date();
+	last.setHours(0, 0, 0, 0, 0);
+	today.setHours(0, 0, 0, 0, 0);
+	function appendMsg(data){
+		//console.log(data);
+		var current = new Date(data.created);
+		var time = current.getHours()+":"+current.getMinutes();
+		current.setHours(0, 0, 0, 0, 0);
+		if(current.getTime() == today.getTime()){
+			var a = '<li class="list-group-item" style="background-color: #ebebe0"><strong>'+current.toString().split(' ').splice(0,4).join(' ')+'</strong></li>';
+			today.setFullYear(today.getFullYear()+1);
+			$(".chat").append(a);
+		}
+		if(last > current){
+			var a = '<li class="list-group-item" style="background-color: #ebebe0"><strong>'+current.toString().split(' ').splice(0,4).join(' ')+'</strong></li>';
+			last = current;
+			$(".chat").append(a);
+		}
+		
+		if(data.personEmail == localStorage.ciscosparkid){
+		    var html = '<li class="right clearfix">';
+		    html += '<span class="chat-img pull-right">';
+		    html += '<img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />';
+		    html += '</span>';
+		    html += '<div class="chat-body clearfix">';
+		    html += '<div class="header">';
+		    html += '<strong class="primary-font">Me</strong> <small class="pull-right text-muted">';
+		    html += '<span class="glyphicon glyphicon-time">&nbsp<time>'+time+'</time></span></small>';
+		    html += '</div>';
+		    html += '<p>'+ data.text +'</p>';
+		    html += '</div></li>';
+		    $(".chat").append(html);		
+		    
+		}else{
+		    var html = '<li class="left clearfix">';
+		    html += '<span class="chat-img pull-left">';
+		    html += '<img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />';
+		    html += '</span>';
+		    html += '<div class="chat-body clearfix">';
+		    html += '<div class="header">';
+		    html += '<small class=" text-muted"><span class="glyphicon glyphicon-time">&nbsp<time>'+time+'</time></span></small>';
+		    html += '<strong class="pull-right primary-font">'+data.personEmail+'</strong>';
+		    html += '</div>';
+		    html += '<p>'+ data.text +'</p>';
+		    html += '</div></li>';
+		    $(".chat").append(html);		
+		}
+	}
+
+	function pollMsg() {
+		var polldata = {
+		  "roomId": room
+		};
+		var headers = {
+		  "Content-type":"application/json; charset=utf-8",
+		  "Authorization":"Bearer "+token
+		};
+		sendRequest("https://api.ciscospark.com/v1/messages","GET",polldata,headers,"poll");
+	}
+		
+	jQuery(document).ready(function(){
+		token = "NzhkZGIxNGMtZmYzMS00ZGIxLWFiZTMtNjg3ZjQ5NDRmN2VlYjU4N2M4OWQtZjU1";
+
+		var url = window.location.href;
+		var email = getParameterByName("email", url);
+		useremail = email;
+		
+		var name = "Meeting "+new Date();
+		var roomData = {
+		  "title": name
+		};
+		var roomHeader = {
+		  "Content-type":"application/json; charset=utf-8",
+		  "Authorization":"Bearer "+token
+		};
+		sendRequest("https://api.ciscospark.com/v1/rooms","POST",JSON.stringify(roomData),roomHeader,"member");
+
+		//chat application specific
+		$( "#btn-chat" ).click(function() {
+			var messagedata = {
+			    "roomId": room,
+			    "text": $("#btn-input").val()
+			};
+			var memberheaders = {
+			    "Content-type":"application/json; charset=utf-8",
+			    "Authorization":"Bearer "+token
+			};
+			sendRequest("https://api.ciscospark.com/v1/messages","POST",JSON.stringify(messagedata),memberheaders,"message");
+		});
+	});
+
+</script>
+</head>
+<body>
+    <div class="container">
+	    <div class="row">
+		<div class="col-md-5">
+		    <div class="panel panel-primary">
+			<div class="panel-heading">
+				<div class="clearfix float-my-children">
+			    <!--<span class="glyphicon glyphicon-comment" id="heading"><p id="heading-text"></p></span>-->
+					<img src="/assets/images/chat.png" alt="" role="presentation" style="width:22px;"/>
+					<p id="heading-text"></p>
+				</div>
+			</div>
+			<div class="panel-body">
+			    <ul class="chat">
+				<!--<li class="left clearfix"><span class="chat-img pull-left">
+				    <img src="http://placehold.it/50/55C1E7/fff&text=U" alt="User Avatar" class="img-circle" />
+				</span>
+				    <div class="chat-body clearfix">
+					<div class="header">
+					    <strong class="primary-font">Jack Sparrow</strong> <small class="pull-right text-muted">
+						<span class="glyphicon glyphicon-time"></span></small>
+					</div>
+					<p>
+					    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
+					    dolor, quis ullamcorper ligula sodales.
+					</p>
+				    </div>
+				</li>
+				<li class="right clearfix"><span class="chat-img pull-right">
+				    <img src="http://placehold.it/50/FA6F57/fff&text=ME" alt="User Avatar" class="img-circle" />
+				</span>
+				    <div class="chat-body clearfix">
+					<div class="header">
+					    <small class=" text-muted"><span class="glyphicon glyphicon-time"></span></small>
+					    <strong class="pull-right primary-font">XYZ</strong>
+					</div>
+					<p>
+					    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur bibendum ornare
+					    dolor, quis ullamcorper ligula sodales.
+					</p>
+				    </div>
+				</li>-->
+			    </ul>
+			</div>
+			<div class="panel-footer">
+			    <div class="input-group">
+				<input id="btn-input" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+				<span class="input-group-btn">
+				    <button class="btn btn-warning btn-sm" id="btn-chat">
+					Send</button>
+				</span>
+			    </div>
+			</div>
+		    </div>
+		</div>
+	    </div>
+	</div>
+</body>
+</html>
